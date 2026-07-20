@@ -18,7 +18,10 @@ export function useAuthSession() {
 
       try {
         const data = await authApi.me();
-        if (active) setUser(data.user);
+        if (active) {
+          if (data.token) setToken(data.token);
+          setUser(data.user);
+        }
       } catch {
         clearToken();
       } finally {
@@ -58,5 +61,9 @@ export function useAuthSession() {
     setError('');
   }
 
-  return { user, initializing, busy, error, authenticate, logout };
+  function clearError() {
+    setError('');
+  }
+
+  return { user, initializing, busy, error, authenticate, logout, clearError };
 }

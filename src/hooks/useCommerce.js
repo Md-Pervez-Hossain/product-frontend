@@ -4,46 +4,65 @@ import { orderApi, productApi } from '../api.js';
 export function useCommerce(user) {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(false);
   const [busyAction, setBusyAction] = useState('');
   const [error, setError] = useState('');
 
-  const refresh = useCallback(async () => {
-    if (!user) return;
+  const refreshProducts = useCallback(async () => {
+    const data = await productApi.list();
+    setProducts(data.products);
+  }, []);
 
-    const [productData, orderData] = await Promise.all([
-      productApi.list(),
-      orderApi.list(),
-    ]);
+  const refreshOrders = useCallback(async () => {
+    if (!user) {
+      setOrders([]);
+      return;
+    }
 
-    setProducts(productData.products);
-    setOrders(orderData.orders);
+    const data = await orderApi.list();
+    setOrders(data.orders);
   }, [user]);
 
   useEffect(() => {
     let active = true;
+    setProductsLoading(true);
 
-    if (!user) {
-      setProducts([]);
-      setOrders([]);
-      setError('');
-      return undefined;
-    }
-
-    setLoading(true);
-    setError('');
-
-    Promise.all([productApi.list(), orderApi.list()])
-      .then(([productData, orderData]) => {
-        if (!active) return;
-        setProducts(productData.products);
-        setOrders(orderData.orders);
+    productApi.list()
+      .then((data) => {
+        if (active) setProducts(data.products);
       })
       .catch((requestError) => {
         if (active) setError(requestError.message);
       })
       .finally(() => {
-        if (active) setLoading(false);
+        if (active) setProductsLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    if (!user) {
+      setOrders([]);
+      setOrdersLoading(false);
+      return undefined;
+    }
+
+    setOrdersLoading(true);
+    orderApi.list()
+      .then((data) => {
+        if (active) setOrders(data.orders);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setOrdersLoading(false);
       });
 
     return () => {
@@ -57,7 +76,7 @@ export function useCommerce(user) {
 
     try {
       await request();
-      await refresh();
+      await refreshProducts();
       return true;
     } catch (requestError) {
       setError(requestError.message);
@@ -75,18 +94,46 @@ export function useCommerce(user) {
     return runAction(`delete-product-${id}`, () => productApi.remove(id));
   }
 
-  function createOrder(order) {
-    return runAction('create-order', () => orderApi.create(order));
+  async function checkout(items) {
+    setBusyAction('checkout');
+    setError('');
+    const completedProductIds = [];
+
+    try {
+      for (const item of items) {
+        await orderApi.create({ product_id: item.product.id, quantity: item.quantity });
+        completedProductIds.push(item.product.id);
+      }
+
+      await Promise.all([refreshProducts(), refreshOrders()]);
+      return { success: true, completedProductIds };
+    } catch (requestError) {
+      setError(
+        completedProductIds.length
+          ? `${requestError.message}. Completed items were removed from your bag.`
+          : requestError.message
+      );
+      await Promise.allSettled([refreshProducts(), refreshOrders()]);
+      return { success: false, completedProductIds };
+    } finally {
+      setBusyAction('');
+    }
+  }
+
+  function clearError() {
+    setError('');
   }
 
   return {
     products,
     orders,
-    loading,
+    productsLoading,
+    ordersLoading,
     busyAction,
     error,
     createProduct,
     deleteProduct,
-    createOrder,
+    checkout,
+    clearError,
   };
 }

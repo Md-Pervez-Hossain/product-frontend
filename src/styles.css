@@ -1,27 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  color: #0a0a0a;
-  background: #f3f3ef;
+  color: #111111;
+  background: #f7f7f5;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+  animation: none !important;
+  transition: none !important;
+}
+
+html {
+  scroll-behavior: auto;
 }
 
 html,
 body,
 #root {
-  min-width: 0;
-  max-width: 100%;
-  overflow-x: hidden;
+  @apply m-0 min-h-full min-w-0 max-w-full;
 }
 
 body {
-  @apply m-0 min-h-screen bg-[#f3f3ef] text-neutral-950 antialiased;
+  @apply overflow-x-hidden bg-[#f7f7f5] text-[#111111] antialiased;
 }
 
 button,
@@ -31,9 +37,7 @@ select {
 }
 
 button,
-a,
-input,
-select {
+a {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -44,114 +48,524 @@ select:focus-visible {
   @apply outline-2 outline-offset-2 outline-black;
 }
 
-.page-shell {
-  @apply mx-auto min-h-screen w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
+a {
+  @apply text-inherit;
 }
 
-.site-header {
-  @apply flex min-h-24 items-center justify-between gap-6 border-b border-black py-5;
+.store-app {
+  @apply min-h-screen;
 }
 
-.brand {
-  @apply flex items-center gap-3 text-black no-underline;
+.store-container {
+  @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12;
 }
 
-.brand-index {
-  @apply grid size-11 place-items-center bg-black text-xs font-bold tracking-[0.16em] text-white;
+.announcement {
+  @apply bg-[#111111] px-5 py-2 text-center text-[9px] font-semibold uppercase tracking-[0.2em] text-white;
 }
 
-.brand strong,
-.brand small {
-  @apply block;
+.store-header {
+  @apply relative z-40 mx-auto flex h-[78px] w-full max-w-[1440px] items-center justify-between border-b border-neutral-200 px-5 sm:px-8 lg:px-12;
 }
 
-.brand strong {
-  @apply text-xs font-bold tracking-[0.16em];
+.store-logo,
+.footer-logo {
+  @apply text-2xl font-black tracking-[-0.06em] no-underline;
 }
 
-.brand small,
-.header-status {
-  @apply mt-1 text-[10px] font-medium tracking-[0.14em] text-neutral-500;
+.store-logo span {
+  @apply ml-0.5 align-top text-[8px] tracking-normal;
 }
 
-.header-status {
-  @apply mt-0 hidden sm:block;
+.store-nav {
+  @apply absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex;
 }
 
-.account-menu {
-  @apply flex items-center gap-4;
+.store-nav-link {
+  @apply relative py-2 text-[11px] font-semibold uppercase tracking-[0.14em] no-underline after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-black hover:after:w-full;
 }
 
-.account-name {
-  @apply hidden text-sm font-semibold sm:block;
+.store-nav-link.active::after {
+  @apply w-full;
 }
 
-.text-button {
-  @apply cursor-pointer border-0 border-b border-black bg-transparent p-0 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em];
+.header-actions {
+  @apply flex items-center gap-4 sm:gap-6;
 }
 
-.page-content {
-  @apply py-10 sm:py-14;
+.header-action,
+.account-action button {
+  @apply cursor-pointer border-0 bg-transparent p-0 text-[10px] font-bold uppercase tracking-[0.14em];
 }
 
-.section-label {
-  @apply m-0 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500;
+.bag-action {
+  @apply flex items-center gap-2;
 }
 
-.auth-layout {
-  @apply grid min-h-[calc(100vh-13rem)] items-center gap-12 py-8 lg:grid-cols-2 lg:gap-24;
+.bag-action span {
+  @apply grid size-5 place-items-center rounded-full bg-black text-[9px] text-white;
 }
 
-.auth-intro,
-.auth-panel {
+.account-action {
+  @apply hidden items-center gap-3 sm:flex;
+}
+
+.account-action > span {
+  @apply max-w-28 truncate text-xs font-semibold;
+}
+
+.account-action button {
+  @apply border-b border-black pb-0.5;
+}
+
+.menu-toggle {
+  @apply grid size-8 cursor-pointer content-center gap-1.5 border-0 bg-transparent p-1 md:hidden;
+}
+
+.menu-toggle i {
+  @apply block h-px w-full bg-black;
+}
+
+.eyebrow {
+  @apply m-0 text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-500;
+}
+
+.button {
+  @apply inline-flex min-h-12 cursor-pointer items-center justify-between gap-8 border-0 px-5 text-[10px] font-bold uppercase tracking-[0.15em] no-underline disabled:cursor-not-allowed disabled:opacity-40;
+}
+
+.button-dark {
+  @apply bg-black text-white hover:bg-neutral-800;
+}
+
+.button-light {
+  @apply bg-white text-black shadow-sm hover:bg-neutral-100;
+}
+
+.button-full {
+  @apply w-full;
+}
+
+.button-grow {
+  @apply flex-1;
+}
+
+.text-link,
+.back-link {
+  @apply w-fit cursor-pointer border-0 border-b border-black bg-transparent p-0 pb-1 text-[10px] font-bold uppercase tracking-[0.13em] no-underline;
+}
+
+.home-hero {
+  @apply grid min-h-[620px] gap-10 py-10 lg:grid-cols-2 lg:gap-16 lg:py-14;
+}
+
+.hero-copy {
+  @apply flex flex-col items-start justify-center py-16 pr-0 lg:pr-20;
+}
+
+.hero-copy h1 {
+  @apply mb-0 mt-7 text-[clamp(3.4rem,6.4vw,6.6rem)] font-semibold leading-[0.9] tracking-[-0.07em];
+}
+
+.hero-description {
+  @apply mb-9 mt-8 max-w-lg text-base leading-7 text-neutral-600;
+}
+
+.hero-image-placeholder {
+  @apply min-h-[360px] lg:min-h-[540px];
+}
+
+.featured-section {
+  @apply py-20 sm:py-24;
+}
+
+.section-heading {
+  @apply mb-10 flex items-end justify-between gap-8 border-b border-neutral-200 pb-6;
+}
+
+.section-heading h2 {
+  @apply mb-0 mt-4 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl;
+}
+
+.product-grid {
+  @apply grid grid-cols-1 gap-x-4 gap-y-12 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+.product-card {
   @apply min-w-0;
 }
 
-.auth-intro {
-  @apply max-w-2xl;
+.product-card > a {
+  @apply block overflow-hidden;
 }
 
-.auth-intro h1,
-.dashboard-heading h1 {
-  @apply mb-0 mt-5 font-semibold tracking-[-0.055em];
+.image-placeholder {
+  @apply relative grid place-items-center overflow-hidden bg-[#e7e7e3] text-center;
 }
 
-.auth-intro h1 {
-  @apply text-5xl leading-[0.96] sm:text-6xl lg:text-7xl;
+.image-placeholder::before,
+.image-placeholder::after {
+  content: "";
+  @apply absolute left-1/2 top-1/2 h-px w-[140%] bg-neutral-300;
 }
 
-.auth-intro > p:last-child {
-  @apply mb-0 mt-8 max-w-md text-base leading-7 text-neutral-600;
+.image-placeholder::before {
+  transform: translate(-50%, -50%) rotate(36deg);
 }
 
-.auth-panel {
-  @apply w-full border border-black bg-white p-6 sm:p-8;
-  box-shadow: 7px 7px 0 #0a0a0a;
+.image-placeholder::after {
+  transform: translate(-50%, -50%) rotate(-36deg);
 }
 
-.auth-tabs {
-  @apply mb-8 grid grid-cols-2 border-b border-black;
+.image-placeholder-copy {
+  @apply relative z-10 grid gap-2 bg-white/90 px-6 py-4 shadow-sm;
 }
 
-.auth-tab {
-  @apply cursor-pointer border-0 bg-transparent px-2 pb-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-neutral-400;
+.image-placeholder-copy span {
+  @apply text-[9px] font-bold uppercase tracking-[0.18em];
 }
 
-.auth-tab.active {
-  @apply text-black;
-  box-shadow: inset 0 -3px 0 #0a0a0a;
+.image-placeholder-copy small {
+  @apply text-[8px] uppercase tracking-[0.12em] text-neutral-500;
 }
 
-.form-stack {
-  @apply grid gap-5;
+.product-art-card {
+  @apply aspect-[4/5];
+}
+
+.product-art-detail {
+  @apply h-full min-h-[520px];
+}
+
+.product-card-copy {
+  @apply flex min-h-[90px] justify-between gap-4 py-4;
+}
+
+.product-card-copy > div {
+  @apply min-w-0;
+}
+
+.product-card-copy a {
+  @apply block truncate text-sm font-semibold no-underline;
+}
+
+.product-card-copy p {
+  @apply mb-0 mt-1 line-clamp-2 text-xs leading-5 text-neutral-500;
+}
+
+.product-card-copy strong {
+  @apply whitespace-nowrap text-sm;
+}
+
+.card-add {
+  @apply flex w-full cursor-pointer items-center justify-between border-0 bg-neutral-100 px-3 py-3 text-[9px] font-bold uppercase tracking-[0.15em] hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:text-neutral-400 disabled:hover:bg-neutral-100 disabled:hover:text-neutral-400;
+}
+
+.product-skeleton {
+  @apply aspect-[4/5] bg-neutral-200;
+}
+
+.home-notes {
+  @apply mt-16 grid gap-5 bg-white px-6 py-7 sm:grid-cols-3;
+}
+
+.home-notes p {
+  @apply m-0 text-[9px] font-bold uppercase tracking-[0.13em] text-neutral-500;
+}
+
+.catalog-empty {
+  @apply bg-white py-20 text-center text-xs font-bold uppercase tracking-[0.18em] text-neutral-400;
+}
+
+.story-band {
+  @apply bg-[#111111] py-20 text-white sm:py-24;
+}
+
+.story-grid {
+  @apply grid gap-8 lg:grid-cols-[0.3fr_1.2fr_0.5fr] lg:items-start;
+}
+
+.story-grid .eyebrow {
+  @apply text-neutral-500;
+}
+
+.story-grid blockquote {
+  @apply m-0 max-w-3xl text-3xl font-medium leading-tight tracking-[-0.04em] sm:text-5xl;
+}
+
+.story-grid > p:last-child {
+  @apply m-0 text-sm leading-6 text-neutral-400;
+}
+
+.page-section {
+  @apply min-h-[65vh] py-16 sm:py-24;
+}
+
+.catalog-header,
+.account-page-header {
+  @apply mb-12 flex flex-col justify-between gap-10 border-b border-neutral-200 pb-8 lg:flex-row lg:items-end;
+}
+
+.catalog-header h1,
+.account-page-header h1,
+.protected-prompt h1,
+.not-found h1 {
+  @apply mb-0 mt-4 text-5xl font-semibold tracking-[-0.065em] sm:text-7xl;
+}
+
+.catalog-header > div:first-child > p:last-child {
+  @apply mb-0 mt-4 text-sm text-neutral-600;
+}
+
+.catalog-controls {
+  @apply grid gap-5 sm:grid-cols-2;
+}
+
+.catalog-controls label,
+.detail-purchase label {
+  @apply grid gap-2;
+}
+
+.catalog-controls label > span,
+.detail-purchase label > span {
+  @apply text-[9px] font-bold uppercase tracking-[0.16em];
+}
+
+.catalog-controls input,
+.catalog-controls select,
+.detail-purchase select {
+  @apply h-11 min-w-52 rounded-none border-0 border-b border-black bg-transparent px-0 text-sm outline-none;
+}
+
+.product-detail-page {
+  @apply grid min-h-[calc(100vh-110px)] py-8 lg:grid-cols-2 lg:gap-16 lg:py-12;
+}
+
+.product-detail-art {
+  @apply min-h-[480px];
+}
+
+.product-detail-copy {
+  @apply flex flex-col justify-center py-12 lg:py-8;
+}
+
+.back-link {
+  @apply mb-14;
+}
+
+.product-detail-copy h1 {
+  @apply mb-0 mt-5 text-5xl font-semibold tracking-[-0.065em] sm:text-7xl;
+}
+
+.detail-price {
+  @apply mb-0 mt-5 text-xl font-semibold;
+}
+
+.detail-description {
+  @apply mb-0 mt-8 max-w-xl text-base leading-7 text-neutral-600;
+}
+
+.product-facts {
+  @apply my-10 bg-white px-5;
+}
+
+.product-facts > div {
+  @apply flex justify-between gap-6 border-b border-neutral-300 py-3 last:border-b-0;
+}
+
+.product-facts dt,
+.product-facts dd {
+  @apply m-0 text-[9px] font-bold uppercase tracking-[0.14em];
+}
+
+.product-facts dd {
+  @apply text-right text-neutral-500;
+}
+
+.detail-purchase {
+  @apply flex items-end gap-4;
+}
+
+.detail-purchase select {
+  @apply min-w-20 border border-neutral-300 px-3;
+}
+
+.detail-note {
+  @apply mt-8 flex gap-4 border-l-2 border-neutral-300 pl-4;
+}
+
+.detail-note span {
+  @apply font-mono text-[9px];
+}
+
+.detail-note p {
+  @apply m-0 max-w-md text-xs leading-5 text-neutral-500;
+}
+
+.protected-prompt,
+.not-found {
+  @apply mx-auto flex min-h-[70vh] max-w-3xl flex-col items-start justify-center px-5 py-20 sm:px-8;
+}
+
+.protected-prompt > p:nth-of-type(2) {
+  @apply mb-8 mt-6 max-w-xl text-base leading-7 text-neutral-600;
+}
+
+.not-found > span {
+  @apply mt-8 text-[clamp(8rem,24vw,18rem)] font-black leading-none tracking-[-0.1em];
+}
+
+.not-found h1 {
+  @apply mb-8 mt-0 text-3xl sm:text-5xl;
+}
+
+.account-page-header > p {
+  @apply m-0 text-xs font-semibold uppercase tracking-[0.12em] text-neutral-500;
+}
+
+.dashboard-metrics {
+  @apply mb-20 grid gap-4 sm:grid-cols-2 xl:grid-cols-4;
+}
+
+.user-dashboard-metrics {
+  @apply xl:grid-cols-3;
+}
+
+.dashboard-metric {
+  @apply flex min-h-40 flex-col justify-end bg-white p-6 shadow-sm;
+}
+
+.dashboard-metric > span {
+  @apply mb-auto text-[9px] font-bold uppercase tracking-[0.16em] text-neutral-500;
+}
+
+.dashboard-metric strong {
+  @apply text-4xl font-semibold tracking-[-0.06em];
+}
+
+.dashboard-metric small {
+  @apply mt-2 text-xs text-neutral-500;
+}
+
+.dashboard-section {
+  @apply mt-20;
+}
+
+.dashboard-section-heading {
+  @apply mb-8 flex flex-col justify-between gap-5 border-b border-neutral-200 pb-6 md:flex-row md:items-end;
+}
+
+.dashboard-section-heading h2 {
+  @apply mb-0 mt-3 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl;
+}
+
+.dashboard-section-heading > p {
+  @apply m-0 max-w-sm text-xs leading-5 text-neutral-500 md:text-right;
+}
+
+.account-empty {
+  @apply bg-white py-20 text-center;
+}
+
+.account-empty > span {
+  @apply font-mono text-6xl text-neutral-300;
+}
+
+.account-empty h2 {
+  @apply mb-0 mt-5 text-3xl tracking-[-0.04em];
+}
+
+.account-empty p {
+  @apply mb-0 mt-3 text-sm text-neutral-500;
+}
+
+.order-table {
+  @apply overflow-hidden bg-white;
+}
+
+.order-table-head,
+.order-entry {
+  @apply grid grid-cols-[1.4fr_0.7fr_0.5fr_0.5fr] items-center gap-4 border-b border-neutral-200 px-5 last:border-b-0;
+}
+
+.order-table-admin .order-table-head,
+.order-table-admin .order-entry {
+  @apply grid-cols-[1.3fr_0.8fr_0.7fr_0.5fr_0.5fr];
+}
+
+.order-table-head {
+  @apply py-3 text-[9px] font-bold uppercase tracking-[0.16em] text-neutral-500;
+}
+
+.order-entry {
+  @apply min-h-24 py-5 text-sm;
+}
+
+.order-entry > div strong,
+.order-entry > div small {
+  @apply block;
+}
+
+.order-entry > div small {
+  @apply mt-1 text-[10px] text-neutral-500;
+}
+
+.order-entry > strong:last-child {
+  @apply text-right;
+}
+
+.customer-id {
+  @apply font-mono text-[10px] text-neutral-500;
+}
+
+.status-pill {
+  @apply w-fit rounded-full bg-neutral-100 px-3 py-1 text-[8px] font-bold uppercase tracking-[0.12em];
+}
+
+.manage-stats {
+  @apply flex gap-8;
+}
+
+.manage-stats span {
+  @apply text-[10px] font-bold uppercase tracking-[0.12em];
+}
+
+.manage-stats strong {
+  @apply mr-1 text-2xl tracking-[-0.04em];
+}
+
+.manage-grid {
+  @apply grid items-start gap-6 xl:grid-cols-[0.7fr_1.3fr];
+}
+
+.manage-card {
+  @apply bg-white shadow-sm;
+}
+
+.manage-card > header {
+  @apply border-b border-neutral-200 p-6;
+}
+
+.manage-card > header h2,
+.manage-card > header h3 {
+  @apply mb-0 mt-3 text-2xl tracking-[-0.04em];
+}
+
+.compact-form {
+  @apply grid grid-cols-2 gap-4 bg-[#efede8] p-6;
 }
 
 .field {
   @apply grid gap-2;
 }
 
-.field > span {
-  @apply text-[10px] font-bold uppercase tracking-[0.14em];
+.field-wide {
+  @apply col-span-2;
+}
+
+.field > span,
+.form-field > span {
+  @apply text-[9px] font-bold uppercase tracking-[0.14em];
 }
 
 .field em {
@@ -159,104 +573,12 @@ select:focus-visible {
 }
 
 .field input,
-.field select {
-  @apply h-12 w-full rounded-none border border-neutral-400 bg-white px-3 text-sm text-black outline-none transition-colors disabled:cursor-not-allowed disabled:bg-neutral-100;
-}
-
-.field input:hover,
-.field select:hover,
-.field input:focus,
-.field select:focus {
-  @apply border-black;
-}
-
-.primary-button,
-.secondary-button {
-  @apply flex h-12 cursor-pointer items-center justify-between border border-black px-4 text-xs font-bold uppercase tracking-[0.12em] transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+.form-field input {
+  @apply h-12 w-full rounded-sm border border-neutral-300 bg-white px-3 text-sm outline-none focus:border-neutral-500;
 }
 
 .primary-button {
-  @apply bg-black text-white hover:bg-neutral-800;
-}
-
-.secondary-button {
-  @apply bg-white text-black hover:bg-black hover:text-white;
-}
-
-.feedback-banner {
-  @apply mb-8 flex items-center gap-3 bg-black px-4 py-3 text-sm text-white;
-}
-
-.feedback-banner span {
-  @apply grid size-6 shrink-0 place-items-center border border-white text-xs font-bold;
-}
-
-.feedback-banner p {
-  @apply m-0;
-}
-
-.dashboard {
-  @apply grid gap-8;
-}
-
-.dashboard-heading {
-  @apply flex flex-col justify-between gap-6 lg:flex-row lg:items-end;
-}
-
-.dashboard-heading h1 {
-  @apply text-4xl sm:text-5xl;
-}
-
-.dashboard-heading > p {
-  @apply m-0 max-w-sm text-sm leading-6 text-neutral-600 lg:text-right;
-}
-
-.stat-strip {
-  @apply m-0 grid border-y border-black sm:grid-cols-3;
-}
-
-.stat-item {
-  @apply flex items-end justify-between border-b border-black px-0 py-5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:first:pl-0 sm:last:border-r-0 sm:last:pr-0;
-}
-
-.stat-item dt {
-  @apply text-[10px] font-bold uppercase tracking-[0.16em] text-neutral-500;
-}
-
-.stat-item dd {
-  @apply m-0 text-3xl font-semibold tracking-[-0.04em];
-}
-
-.workspace-grid {
-  @apply grid items-start gap-6 xl:grid-cols-[1.15fr_0.85fr];
-}
-
-.workspace-panel {
-  @apply border border-black bg-white;
-}
-
-.panel-heading {
-  @apply flex items-start justify-between border-b border-black p-5 sm:p-6;
-}
-
-.panel-heading h2 {
-  @apply mb-0 mt-2 text-2xl font-semibold tracking-[-0.03em];
-}
-
-.panel-heading > span {
-  @apply font-mono text-xs text-neutral-500;
-}
-
-.compact-form {
-  @apply grid grid-cols-2 gap-4 border-b border-black bg-neutral-100 p-5 sm:p-6;
-}
-
-.field-wide {
-  @apply col-span-2;
-}
-
-.order-form {
-  @apply bg-white;
+  @apply flex h-12 cursor-pointer items-center justify-between border-0 bg-black px-4 text-[9px] font-bold uppercase tracking-[0.14em] text-white disabled:cursor-not-allowed disabled:opacity-40;
 }
 
 .record-list {
@@ -264,11 +586,7 @@ select:focus-visible {
 }
 
 .record-row {
-  @apply grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-4 border-b border-neutral-300 p-5 last:border-b-0 sm:p-6;
-}
-
-.order-row {
-  @apply grid-cols-[minmax(0,1fr)_auto];
+  @apply grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-5 border-b border-neutral-300 p-5 last:border-b-0;
 }
 
 .record-main {
@@ -276,81 +594,360 @@ select:focus-visible {
 }
 
 .record-main strong {
-  @apply block truncate text-sm font-semibold;
+  @apply block truncate text-sm;
 }
 
 .record-main p,
 .record-metric small {
-  @apply mb-0 mt-1 text-xs text-neutral-500;
+  @apply mb-0 mt-1 block text-xs text-neutral-500;
 }
 
 .record-metric {
-  @apply text-right;
-}
-
-.record-metric span {
-  @apply block text-sm font-semibold;
-}
-
-.record-metric small {
-  @apply block capitalize;
+  @apply text-right text-sm;
 }
 
 .icon-button {
-  @apply grid size-8 cursor-pointer place-items-center border border-transparent bg-transparent text-xl leading-none transition-colors hover:border-black hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-40;
+  @apply grid size-8 cursor-pointer place-items-center border-0 bg-neutral-100 text-xl hover:bg-black hover:text-white disabled:opacity-40;
 }
 
 .empty-state,
-.loading-copy {
-  @apply m-0 p-10 text-center text-xs font-semibold uppercase tracking-[0.14em] text-neutral-400;
+.loading-copy,
+.route-loading {
+  @apply m-0 p-16 text-center text-[10px] font-bold uppercase tracking-[0.16em] text-neutral-400;
+}
+
+.feedback-banner {
+  @apply fixed bottom-5 left-1/2 z-[80] flex w-[calc(100%-2.5rem)] max-w-xl -translate-x-1/2 items-center justify-between gap-4 bg-black px-5 py-4 text-sm text-white shadow-2xl;
+}
+
+.feedback-banner p {
+  @apply m-0;
+}
+
+.feedback-banner button {
+  @apply cursor-pointer border-0 bg-transparent text-xl text-white;
+}
+
+.modal-backdrop,
+.drawer-backdrop {
+  @apply fixed inset-0 z-[70] flex bg-black/55 p-4 backdrop-blur-[2px];
+}
+
+.modal-backdrop {
+  @apply items-center justify-center;
+}
+
+.modal-card {
+  @apply w-full max-w-[520px] bg-[#f7f7f5] shadow-2xl;
+}
+
+.modal-header,
+.drawer-header {
+  @apply flex items-start justify-between gap-8 border-b border-neutral-200 p-6;
+}
+
+.modal-header h2,
+.drawer-header h2 {
+  @apply mb-0 mt-3 text-3xl font-semibold tracking-[-0.05em];
+}
+
+.drawer-header h2 span {
+  @apply ml-1 align-top font-mono text-xs text-neutral-500;
+}
+
+.close-button {
+  @apply grid size-9 cursor-pointer place-items-center border-0 bg-neutral-100 text-2xl leading-none hover:bg-black hover:text-white;
+}
+
+.auth-switch {
+  @apply grid grid-cols-2 border-b border-neutral-200;
+}
+
+.auth-switch button {
+  @apply cursor-pointer border-0 border-r border-neutral-200 bg-transparent px-6 py-4 text-left text-[9px] font-bold uppercase tracking-[0.14em] text-neutral-400 last:border-r-0;
+}
+
+.auth-switch button.active {
+  @apply bg-black text-white;
+}
+
+.modal-form {
+  @apply grid gap-5 p-6;
+}
+
+.form-field {
+  @apply grid gap-2;
+}
+
+.modal-error {
+  @apply m-0 border-b border-neutral-200 bg-white px-6 py-3 text-xs;
+}
+
+.drawer-backdrop {
+  @apply justify-end p-0;
+}
+
+.cart-drawer {
+  @apply flex h-full w-full max-w-[500px] flex-col bg-[#f7f7f5] shadow-2xl;
+}
+
+.cart-lines {
+  @apply flex-1 overflow-y-auto;
+}
+
+.cart-empty {
+  @apply flex h-full min-h-96 flex-col items-center justify-center px-8 text-center;
+}
+
+.cart-empty > span {
+  @apply font-mono text-7xl text-neutral-300;
+}
+
+.cart-empty h3 {
+  @apply mb-0 mt-5 text-2xl tracking-[-0.04em];
+}
+
+.cart-empty p {
+  @apply mb-7 mt-3 text-sm text-neutral-500;
+}
+
+.cart-line {
+  @apply grid grid-cols-[92px_1fr_auto] gap-4 border-b border-neutral-200 p-5;
+}
+
+.cart-thumb {
+  @apply grid aspect-square place-items-center bg-black text-2xl font-black text-white;
+}
+
+.cart-line-copy h3 {
+  @apply m-0 text-sm;
+}
+
+.cart-line-copy > p {
+  @apply mb-0 mt-1 text-xs text-neutral-500;
+}
+
+.quantity-control {
+  @apply mt-4 flex w-fit items-center bg-neutral-100;
+}
+
+.quantity-control button,
+.quantity-control span {
+  @apply grid size-8 place-items-center border-0 bg-transparent text-xs;
+}
+
+.quantity-control button {
+  @apply cursor-pointer hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:text-neutral-300 disabled:hover:bg-transparent;
+}
+
+.remove-line {
+  @apply h-fit cursor-pointer border-0 border-b border-black bg-transparent p-0 text-[8px] font-bold uppercase tracking-[0.12em];
+}
+
+.cart-footer {
+  @apply border-t border-neutral-200 bg-white p-6;
+}
+
+.cart-total {
+  @apply flex items-center justify-between text-lg;
+}
+
+.cart-total span {
+  @apply text-[10px] font-bold uppercase tracking-[0.14em];
+}
+
+.cart-footer > p {
+  @apply mb-5 mt-2 text-[10px] leading-4 text-neutral-500;
+}
+
+.store-footer {
+  @apply mx-auto grid w-full max-w-[1440px] gap-10 border-t border-neutral-200 px-5 py-12 sm:grid-cols-3 sm:px-8 lg:px-12;
+}
+
+.store-footer > div:first-child p {
+  @apply mb-0 mt-3 max-w-xs text-xs leading-5 text-neutral-500;
+}
+
+.footer-links,
+.service-note {
+  @apply flex flex-col items-start gap-3 text-[9px] font-bold uppercase tracking-[0.13em];
+}
+
+.footer-links a {
+  @apply border-b border-transparent no-underline hover:border-black;
+}
+
+.service-note {
+  @apply text-neutral-400 sm:items-end;
 }
 
 .page-loader {
-  @apply grid min-h-screen place-content-center justify-items-center gap-4 bg-[#f3f3ef] text-center;
+  @apply grid min-h-screen place-content-center justify-items-center gap-4 bg-[#f7f7f5] text-center;
 }
 
 .page-loader span {
-  @apply text-xs font-bold tracking-[0.2em];
+  @apply text-2xl font-black tracking-[-0.06em];
 }
 
 .page-loader div {
-  @apply h-px w-28 animate-pulse bg-black;
+  @apply h-px w-28 bg-black;
 }
 
 .page-loader p {
-  @apply m-0 text-[10px] uppercase tracking-[0.16em] text-neutral-500;
+  @apply m-0 text-[9px] font-bold uppercase tracking-[0.16em] text-neutral-500;
 }
 
-@media (max-width: 639px) {
-  .page-shell {
-    @apply px-4;
+@media (max-width: 767px) {
+  .store-nav {
+    @apply absolute left-0 top-full w-full translate-x-0 flex-col items-stretch gap-0 border-b border-neutral-200 bg-[#f7f7f5] px-5 py-3;
   }
 
-  .auth-panel {
-    @apply p-5;
-    box-shadow: 4px 4px 0 #0a0a0a;
+  .store-nav.open {
+    @apply flex;
   }
 
-  .auth-tab {
-    @apply min-w-0 whitespace-nowrap px-1 text-[9px];
+  .store-nav-link {
+    @apply border-b border-neutral-300 py-4 last:border-b-0;
   }
 
-  .primary-button,
-  .secondary-button {
-    @apply text-[10px];
+  .store-nav-link::after {
+    @apply hidden;
+  }
+
+  .home-hero {
+    @apply min-h-[560px];
+  }
+
+  .section-heading {
+    @apply items-start;
+  }
+
+  .section-heading .text-link {
+    @apply hidden;
+  }
+
+  .product-detail-art {
+    @apply min-h-[420px];
+  }
+
+  .product-art-detail {
+    @apply min-h-[420px];
+  }
+
+  .order-table-head {
+    @apply hidden;
+  }
+
+  .order-entry {
+    @apply grid-cols-2 gap-y-5 px-0;
+  }
+
+  .order-table-admin .order-entry {
+    @apply grid-cols-2 px-4;
+  }
+
+  .order-entry > strong:last-child {
+    @apply text-left;
   }
 
   .record-row {
-    grid-template-columns: minmax(0, 1fr) auto;
+    @apply grid-cols-[minmax(0,1fr)_auto];
   }
 
-  .record-row .record-metric {
-    grid-column: 1;
-    text-align: left;
+  .record-metric {
+    @apply col-start-1 text-left;
   }
 
   .record-row .icon-button {
-    grid-column: 2;
-    grid-row: 1 / span 2;
+    @apply col-start-2 row-span-2 row-start-1;
+  }
+}
+
+@media (max-width: 520px) {
+  .announcement {
+    @apply truncate px-4;
+  }
+
+  .store-header {
+    @apply px-4;
+  }
+
+  .store-container {
+    @apply px-4;
+  }
+
+  .header-actions {
+    @apply gap-3;
+  }
+
+  .home-hero {
+    @apply min-h-[540px];
+  }
+
+  .hero-copy h1 {
+    @apply text-[3.35rem];
+  }
+
+  .hero-description {
+    @apply text-sm leading-6;
+  }
+
+  .product-grid {
+    @apply grid-cols-1;
+  }
+
+  .catalog-header h1,
+  .account-page-header h1,
+  .protected-prompt h1 {
+    @apply text-5xl;
+  }
+
+  .catalog-controls {
+    @apply grid-cols-1;
+  }
+
+  .catalog-controls input,
+  .catalog-controls select {
+    @apply w-full min-w-0;
+  }
+
+  .product-detail-page {
+    @apply px-0 py-0;
+  }
+
+  .product-detail-copy {
+    @apply px-4;
+  }
+
+  .product-detail-copy h1 {
+    @apply text-5xl;
+  }
+
+  .detail-purchase {
+    @apply flex-col items-stretch;
+  }
+
+  .detail-purchase select {
+    @apply w-full;
+  }
+
+  .modal-backdrop {
+    @apply items-end p-0;
+  }
+
+  .modal-card {
+    @apply max-h-[92vh] overflow-y-auto border-x-0 border-b-0;
+  }
+
+  .cart-line {
+    @apply grid-cols-[72px_1fr] pr-4;
+  }
+
+  .remove-line {
+    @apply col-start-2 w-fit;
+  }
+
+  .manage-stats {
+    @apply gap-4;
   }
 }
